@@ -1,0 +1,37 @@
+<%-- any content can be specified here e.g.: --%>
+
+<%@page import="core.beans.Genre"%>
+<%@ page pageEncoding="UTF-8" %>
+<div class="sidebar1">
+    <h4>Жанры</h4>
+    <jsp:useBean id="genreList" scope="page" class="core.beans.GenreList" />
+
+    <ul class="nav">
+
+        <%
+            long selectedGenreId = 0L;
+
+            if (request.getParameter("genre_id") != null) {
+                selectedGenreId = Long.valueOf(request.getParameter("genre_id"));
+                session.setAttribute("genre_id", selectedGenreId);
+
+            } else if (session.getAttribute("genre_id") != null) {
+                selectedGenreId = Long.valueOf(session.getAttribute("genre_id").toString());
+            }
+            
+        %>
+        <li><a href="books.jsp?genre_id=0">Все книги</a></li>
+            <%
+                for (Genre genre : genreList.getGenreList()) {
+                    if (selectedGenreId != 0 && selectedGenreId == genre.getId()) {
+            %>
+        <li ><a style="color: crimson" href="books.jsp?genre_id=<%= genre.getId()%>"><%= genre.getName()%></a></li>
+            <% } else {
+            %>
+        <li><a href="books.jsp?genre_id=<%= genre.getId()%>"><%= genre.getName()%></a></li>
+            <% }
+                }
+            %>
+
+    </ul>
+</div>

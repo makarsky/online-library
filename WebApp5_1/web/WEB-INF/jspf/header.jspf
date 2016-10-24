@@ -1,0 +1,94 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html>
+
+    <fmt:requestEncoding value="UTF-8"/>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title><fmt:message bundle="${loc}" key="main.title"/></title>
+        <link rel="stylesheet" href="../css/style_main.css" type="text/css"/>
+        <link rel="shortcut icon" href="http://www.freeiconspng.com/uploads/book-icon--icon-search-engine-6.png" type="image/x-icon">
+    </head>
+    <body>
+
+        <c:set var="admin" value="${sessionScope.role eq 'ADMIN'}"/>
+        <c:set var="user" value="${sessionScope.role eq 'USER'}"/>
+
+
+        <%
+
+            request.setCharacterEncoding("UTF-8");
+            String searchString = "";
+
+            if (request.getParameter("search_string") != null) {
+                searchString = request.getParameter("search_string");
+                session.setAttribute("search_string", searchString);
+            } else if (session.getAttribute("search_string") != null) {
+                searchString = session.getAttribute("search_string").toString();
+            } else {
+                session.setAttribute("search_string", searchString);
+            }
+
+        %>
+
+        <div class="container">
+
+            <div class="header">
+
+                <div class="logo">
+                    <a href="main.jsp"><img src="http://www.freeiconspng.com/uploads/book-icon--icon-search-engine-6.png" alt="Логотип" name="logo" height="100" width="100"/></a>
+
+                </div>
+                <div class="descr">
+                    <h3><fmt:message bundle="${loc}" key="main.title"/></h3>
+
+                </div>
+                <div class="welcome">                
+
+                    <h3><fmt:message bundle="${loc}" key="main.greeting"/>, 
+                        <i><%= session.getAttribute("login")%></i></h3>
+
+
+                    <form action="../Check" method="POST">
+                        <c:if test="${admin}">
+
+                            <a href="adminpanel.jsp?action=addBook">
+                                <fmt:message bundle="${loc}" key="adminpanel.add_book"/></a>
+                                <c:out value=" "/>
+                            <a href="books.jsp?favorites=true">
+                                <fmt:message bundle="${loc}" key="books_favorites"/></a>
+
+                        </c:if>
+                            
+                        <c:if test="${user}">
+                            <a href="books.jsp?favorites=true">
+                                <fmt:message bundle="${loc}" key="books_favorites"/></a>
+                        </c:if>
+                        <br>
+                        <br>
+                        <button type="button" name="previous" onclick="history.back()"><fmt:message bundle="${loc}" key="main.previous"/></button>
+
+                        <button type="button" name="next" onclick="history.forward()"><fmt:message bundle="${loc}" key="main.next"/></button>
+
+                        <input type="submit" value="<fmt:message bundle="${loc}" key="main.exit"/>" name="exit"/>
+                    </form>
+                </div>
+
+
+
+                <div class="search_form">
+                    <form name="search_form" method="GET" action="books.jsp">
+                        <input type="text" name="search_string" value="<%= searchString%>" size="100"/>
+                        <input class="search_button" type="submit" value="<fmt:message bundle="${loc}" key="main.search"/>" />
+                        <select name="search_option">
+                            <option><fmt:message bundle="${loc}" key="main.search_title"/></option>
+                            <option><fmt:message bundle="${loc}" key="main.search_author"/></option>
+                        </select>
+                    </form>
+                </div>
+
+            </div>

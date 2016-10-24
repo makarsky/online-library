@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/WebApp">
+    <Resource driverClassName="com.mysql.jdbc.Driver" maxActive="4" maxIdle="2" maxWait="5000" name="jdbc/library"
+              password="1234" type="javax.sql.DataSource" url="jdbc:mysql://127.0.0.1:3306/library" username="root">
+    </Resource>
+</Context>
